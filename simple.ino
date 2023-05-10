@@ -28,7 +28,7 @@ void loop () {
 
   */
 
-    if(distanceSensor.measureDistanceCm() < dist) {
+    if(distanceSensor.measureDistanceCm() == dist) {
       Serial.println(distanceSensor.measureDistanceCm());
       delay(100);
     }
