@@ -1,3 +1,5 @@
+/* Classe de funcionamento e configuração dos motores de passo */
+
 class stepperMotor {
   private:
     byte stepPin;               // Pino para pulsos de step

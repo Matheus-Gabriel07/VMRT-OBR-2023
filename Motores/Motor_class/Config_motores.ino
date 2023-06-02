@@ -1,3 +1,5 @@
+// Funções dos motores
+
 void frente(int move) {
   motorLeft.move(move);
   motorRight.move(-move);
