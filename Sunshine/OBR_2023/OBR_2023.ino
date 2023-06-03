@@ -1,5 +1,4 @@
 #include <Encoder.h>
-#include <HCSR04.h>
 
 // Definição do sensores de refletância
 #define sen1 (A13)
@@ -21,9 +20,6 @@
 
 // Definição dos sensores ultrasonicos
 
-UltraSonicDistanceSensor sensorFrente (45, 44);
-UltraSonicDistanceSensor sensorEsq (49, 48);
-UltraSonicDistanceSensor sensorDir (46, 47);
 int distace, distaceLatEsq, distaceLatDir;
 int alvo = 10;
 
@@ -67,18 +63,18 @@ float distancia_parada = 11;
 void setup() {
   Serial.begin(1200);
   
-  pinMode(sen1, INPUT):
-  pinMode(sen2, INPUT):
-  pinMode(sen3, INPUT):
-  pinMode(sen4, INPUT):
-  pinMode(sen5, INPUT):
-  pinMode(sen6, INPUT):
-  pinMode(sen7, INPUT):
-  pinMode(sen8, INPUT):
+  pinMode(sen1, INPUT);
+  pinMode(sen2, INPUT);
+  pinMode(sen3, INPUT);
+  pinMode(sen4, INPUT);
+  pinMode(sen5, INPUT);
+  pinMode(sen6, INPUT);
+  pinMode(sen7, INPUT);
+  pinMode(sen8, INPUT);
 
-  pinMode(LED_green, OUTPUT):
-  pinMode(LED_redEsq, OUTPUT):
-  pinMode(LED_redDir, OUTPUT):
+  pinMode(LED_green, OUTPUT);
+  pinMode(LED_redEsq, OUTPUT);
+  pinMode(LED_redDir, OUTPUT);
 
   pinMode(BTN_f1, INPUT_PULLUP);
   pinMode(BTN_f2, INPUT_PULLUP);

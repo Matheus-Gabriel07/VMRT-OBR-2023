@@ -24,10 +24,3 @@ void curvaDir(int move) { //Curva para direita em um eixo
   motorLeft.move(0);
   motorRight.move(-move);
 }
-
-void setup(){
-  Serial.begin(115200);
-}
-void loop(){
-  frente(100);
-}
