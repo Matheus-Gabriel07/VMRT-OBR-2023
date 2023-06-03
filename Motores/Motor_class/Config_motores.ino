@@ -10,24 +10,25 @@ void reverso (int move) {
   motorRight.move(move);
 }
 
-void statico (int move) {
+void statico () {
   motorLeft.move(0);
   motorRight.move(0);
 }
 
 void curvaEsq(int move) { //Curva para esquerda em um eixo
   motorLeft.move(move);
-  motorRight.move(0);
+  motorRight.move(-move);
 }
 
 void curvaDir(int move) { //Curva para direita em um eixo
-  motorLeft.move(0);
-  motorRight.move(-move);
+  motorLeft.move(-move);
+  motorRight.move(move);
 }
 
 void setup(){
   Serial.begin(115200);
 }
 void loop(){
-  frente(100);
+frente(70);
+
 }
