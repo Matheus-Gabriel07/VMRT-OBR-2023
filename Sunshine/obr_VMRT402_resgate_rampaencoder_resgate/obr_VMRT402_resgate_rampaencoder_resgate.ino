@@ -7,7 +7,7 @@
 
 MPU6050 mpu6050(Wire);
 long timer = 0;
-double giro;
+double gyro;
 
 //DECLARAÇÃO DOS SENSORES DE REFLETÂNCIA
 QTRSensors qtr;
@@ -16,34 +16,34 @@ const uint8_t SensorCount = 8;
 uint16_t sensorValues[SensorCount];
 
 //DECLARAÇÃO DOS SENSORES DE COR
-#define cor1 A9    //CABO AZUL
-#define cor2 A8    //CABO VERDE   
+#define cor1 A9  //CABO AZUL
+#define cor2 A8  //CABO VERDE
 
 //DECLARAÇÃO DOS MOTORES -> 05052022 INICIO &&
 
-#define G1 12      //motor GARRA
-#define G2 13      //motor GARRA
-#define M1A 11      //motor da direita
-#define M1B 10      //motor da direita
-#define M2A 12      //motor da esquerda
-#define M2B 13      //motor da esquerda
+#define G1 12   //motor GARRA
+#define G2 13   //motor GARRA
+#define M1A 11  //motor da direita
+#define M1B 10  //motor da direita
+#define M2A 12  //motor da esquerda
+#define M2B 13  //motor da esquerda
 Encoder encoderM1(18, 19);
 Encoder encoderM2(20, 21);
-#define C1 10     //motor comporta
-#define C2 11     //motor comporta
+#define C1 10  //motor comporta
+#define C2 11  //motor comporta
 
 
 
 //declaração ultrassonicos
 
-#define T_PIN_frente  24
-#define E_PIN_frente  25
+#define T_PIN_frente 24
+#define E_PIN_frente 25
 UltraSonicDistanceSensor u_frente(T_PIN_frente, E_PIN_frente);
-#define T_PIN_lat  26
-#define E_PIN_lat  27
+#define T_PIN_lat 26
+#define E_PIN_lat 27
 UltraSonicDistanceSensor u_lat(T_PIN_lat, E_PIN_lat);
-#define T_PIN_late  28
-#define E_PIN_late  29
+#define T_PIN_late 28
+#define E_PIN_late 29
 UltraSonicDistanceSensor u_late(T_PIN_late, E_PIN_late);
 
 boolean rampa = false;
@@ -56,19 +56,17 @@ int dist_garra = 20;
 
 
 //REGULAGEM DO ROBÔ COMEÇA AQUI
-float GiroX = 0.0;        // GIRO os copium X
-float GiroZ = 0.0;        // Giro os copium Z
-int preto   = 800;        //define valor de refletância para o preto. mudar aqui, após testar os sensores
-int corte   = 990;       //define valor que o sensor de refletância, descarta. usamos para acertar os redutores de velocidade
-int l_linha = 280;      //define extensão da linha, perpendicularmente ao robô. tempo que o robô tem que andar, para ultrapassar uma linha em um cruzamento
-int ajuste  = 100;        //distância que regula a posição do sensor de cor
-int verde1  = 405;
-int verde2  = 375;//leitura do verde
-int corte_verde1 = 236; //corte para o verde
-int corte_verde2 = 175; //corte para o verde
+float GiroX = 0.0;  // GIRO os copium X
+float GiroZ = 0.0;  // Giro os copium Z
+int preto = 800;    //define valor de refletância para o preto. mudar aqui, após testar os sensores
+int corte = 990;    //define valor que o sensor de refletância, descarta. usamos para acertar os redutores de velocidade
+int l_linha = 280;  //define extensão da linha, perpendicularmente ao robô. tempo que o robô tem que andar, para ultrapassar uma linha em um cruzamento
+int ajuste = 100;   //distância que regula a posição do sensor de cor
+int verde1 = 805;
+int verde2 = 375;        //leitura do verde
+int corte_verde1 = 236;  //corte para o verde
+int corte_verde2 = 175;  //corte para o verde
 //Velocidade dos Motores
-int F1 = 200;          //forca a ser aplicada no motor 1 (direita)
-int F2 = 200;           //forca a ser aplicada no motor 2 (esquerda)
 int FG = 150;
 int FC = 100;
 int tempo_atual = 0;
@@ -79,18 +77,18 @@ float distancia_parada = 11;
 
 
 //Valores dos obstáculos
-int curvanoventa       = 1650;    //número de pulsos do encoder para uma curva de noventa graus
-int curvanoventaesqu   = 1450;
-int curva_direita  = 2000;    //período que o robô leva para fazer uma curva de 90º direita
-int curva_esquerda = 1700;    //período que o robô leva para fazer uma curva de 90º esquerda
-int comp_obs       = 5000;    //comprimento do obstáculo
-int larg_obs       = 4750;    //largura do obstáculo
+int curvanoventa = 1650;  //número de pulsos do encoder para uma curva de noventa graus
+int curvanoventaesqu = 1450;
+int curva_direita = 2000;   //período que o robô leva para fazer uma curva de 90º direita
+int curva_esquerda = 1700;  //período que o robô leva para fazer uma curva de 90º esquerda
+int comp_obs = 5000;        //comprimento do obstáculo
+int larg_obs = 4750;        //largura do obstáculo
 
 //REGULAGEM DO ROBÔ ACABA AQUI
 
 void setup() {
   // inicia serial. o serial, pode ser usado para acompanhar a leitura dos sensores
-  Serial.begin(9600);
+  Serial.begin(115200);
   Wire.begin();
   mpu6050.begin();
   mpu6050.calcGyroOffsets(true);
@@ -102,46 +100,27 @@ void setup() {
     qtr.setSensorPins((const uint8_t[]){2,3, 4, 5, 6, 7, 8, 9}, SensorCount);
     qtr.setEmitterPin(2);
 
-    //incia motores
-    pinMode(M1A, OUTPUT);
-    pinMode(M1B, OUTPUT);
-    pinMode(M2A, OUTPUT);
-    pinMode(M2A, OUTPUT);
-
-
-    }
     int FT = 100;*/
 }
 
 void loop() {
 
-  giro = mpu6050.getGyroAngleZ();
-  while(millis()<5000){
-  frente(40);
-  }
-  while(millis()<10000){
-  reverso(40);
-  }
-  while(millis()<15000){
-  curvaDir(40);
-  }
+  gyro = mpu6050.getGyroAngleZ();
 
-  while(millis()<20000){
-  curvaEsq(40);
+  while (millis() < 7000) {
+    frente(80);
+  }
+  while (millis() < 10000) {
+    reverso(80);
+  }
+  while (millis() < 15000) {
+    curvaDir(80);
+  }
+  while (millis() < 20000) {
+    curvaEsq(80);
   }
   frear(0);
 }
-/*loping do programa com segue linha e detecção de obstáculos combinados
-
-  /*
-  frente(100);
-  frear(100);
-  curvaDir(100);
-  frear(100);
-  curvaEsq(100);
-  frear(100);
-  reverso(100);
-*/
 
 
 /*
