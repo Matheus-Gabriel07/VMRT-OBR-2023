@@ -88,7 +88,7 @@ int larg_obs = 4750;        //largura do obstáculo
 
 void setup() {
   // inicia serial. o serial, pode ser usado para acompanhar a leitura dos sensores
-  Serial.begin(115200);
+  Serial.begin(9600);
   Wire.begin();
   mpu6050.begin();
   mpu6050.calcGyroOffsets(true);
@@ -105,19 +105,13 @@ void setup() {
 
 void loop() {
 
+  mpu6050.update();
   gyro = mpu6050.getGyroAngleZ();
-
-  while (millis() < 5000) {
-    frente(40);
-  }
-  while (millis() < 10000) {
-    reverso(40);
-  }
-  while (millis() < 15000) {
-    curvaDir(40);
-  }
-  while (millis() < 20000) {
-    curvaEsq(40);
+  while(!(gyro > 92 && gyro < 90)) {
+    mpu6050.update();
+    curvaEsq(20);
+    gyro = mpu6050.getGyroAngleZ();
+    Serial.println(gyro);
   }
   frear(0);
 }
