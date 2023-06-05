@@ -198,10 +198,10 @@ void frear (int move) {
 
 void curvaEsq(int move) { //Curva para esquerda em um eixo
   motorLeft.move(move);
-  motorRight.move(0);
+  motorRight.move(move);
 }
 
 void curvaDir(int move) { //Curva para direita em um eixo
-  motorLeft.move(0);
+  motorLeft.move(-move);
   motorRight.move(-move);
 }

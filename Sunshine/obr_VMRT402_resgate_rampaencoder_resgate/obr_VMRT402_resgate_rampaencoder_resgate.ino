@@ -107,17 +107,17 @@ void loop() {
 
   gyro = mpu6050.getGyroAngleZ();
 
-  while (millis() < 7000) {
-    frente(80);
+  while (millis() < 5000) {
+    frente(40);
   }
   while (millis() < 10000) {
-    reverso(80);
+    reverso(40);
   }
   while (millis() < 15000) {
-    curvaDir(80);
+    curvaDir(40);
   }
   while (millis() < 20000) {
-    curvaEsq(80);
+    curvaEsq(40);
   }
   frear(0);
 }
