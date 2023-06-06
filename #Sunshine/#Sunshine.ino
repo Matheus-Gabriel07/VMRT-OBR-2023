@@ -1,13 +1,13 @@
 #include <Encoder.h>
 #include <HCSR04.h>
 #include <QTRSensors.h>
+#define "button.h"
 //Sensor de Giroscópico
 #include <MPU6050_tockn.h>
 #include <Wire.h>
-
 MPU6050 mpu6050(Wire);
 long timer = 0;
-double gyro;
+float gyro;
 
 //DECLARAÇÃO DOS SENSORES DE REFLETÂNCIA
 QTRSensors qtr;
@@ -23,10 +23,6 @@ uint16_t sensorValues[SensorCount];
 
 #define G1 12   //motor GARRA
 #define G2 13   //motor GARRA
-#define M1A 11  //motor da direita
-#define M1B 10  //motor da direita
-#define M2A 12  //motor da esquerda
-#define M2B 13  //motor da esquerda
 Encoder encoderM1(18, 19);
 Encoder encoderM2(20, 21);
 #define C1 10  //motor comporta
@@ -50,9 +46,6 @@ boolean rampa = false;
 int ultima_medida, contador = 0;
 int dist_esq, dist_dir = 10000;
 int dist_garra = 20;
-
-
-// olhar o robô, , de frente para onde sobe a fiação dos motores. motor a direita, é o que está a sua direita. esquerda a mesma coisa, mas a esquerda
 
 
 //REGULAGEM DO ROBÔ COMEÇA AQUI
@@ -93,6 +86,9 @@ void setup() {
   mpu6050.begin();
   mpu6050.calcGyroOffsets(true);
 
+  start.waitForRealease{
+    loop();
+  }
 
 
   /*
@@ -107,13 +103,15 @@ void loop() {
 
   mpu6050.update();
   gyro = mpu6050.getGyroAngleZ();
-  while(!(gyro > 92 && gyro < 90)) {
-    mpu6050.update();
-    curvaEsq(20);
-    gyro = mpu6050.getGyroAngleZ();
-    Serial.println(gyro);
+
+  while(!gyro > 88 && !gyro < 92){
+    curvaDir(40);
   }
   frear(0);
+}
+
+void debug() {
+  //Void de debug
 }
 
 
