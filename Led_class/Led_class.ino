@@ -7,7 +7,7 @@ class Led {
       pinMode(ledPin, OUTPUT);
     }
 
-  public :
+  public:
     byte ledPin;     //Pino do led
     bool state;      //Indica o estado do LED
 
