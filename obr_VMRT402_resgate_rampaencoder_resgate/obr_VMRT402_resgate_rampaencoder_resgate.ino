@@ -1,6 +1,7 @@
 #include <Encoder.h>
 #include <HCSR04.h>
 #include <QTRSensors.h>
+
 //Sensor de Giroscópico
 #include <MPU6050_tockn.h>
 #include <Wire.h>
@@ -17,33 +18,32 @@ int alvo;
 #define sensor4 A8
 
 //DECLARAÇÃO DOS SENSORES DE COR
-#define cor1 A9  //CABO AZUL
-#define cor2 A8  //CABO VERDE
+#define cor1 A15  //CABO AZUL
+#define cor2 A14  //CABO VERDE
 
-//DECLARAÇÃO DOS MOTORES -> 05052022 INICIO &&
+//DECLARAÇÃO DOS MOTORES 
 
 #define G1 12   //motor GARRA
 #define G2 13   //motor GARRA
-#define M1A 11  //motor da direita
-#define M1B 10  //motor da direita
-#define M2A 12  //motor da esquerda
-#define M2B 13  //motor da esquerda
 Encoder encoderM1(18, 19);
 Encoder encoderM2(20, 21);
 #define C1 10  //motor comporta
 #define C2 11  //motor comporta
 
-//declaração ultrassonicos
+//declaração ultrassonicos (Mudar portas)
 
 #define T_PIN_frente 24
 #define E_PIN_frente 25
 UltraSonicDistanceSensor u_frente(T_PIN_frente, E_PIN_frente);
 #define T_PIN_lat 26
 #define E_PIN_lat 27
-UltraSonicDistanceSensor u_lat(T_PIN_lat, E_PIN_lat);
+UltraSonicDistanceSensor u_Esq(T_PIN_lat, E_PIN_lat);
 #define T_PIN_late 28
 #define E_PIN_late 29
-UltraSonicDistanceSensor u_late(T_PIN_late, E_PIN_late);
+UltraSonicDistanceSensor u_Dir(T_PIN_late, E_PIN_late);
+#define T_PIN_late 30
+#define E_PIN_late 31
+UltraSonicDistanceSensor u_Top(T_PIN_late, E_PIN_late);
 
 boolean rampa = false;
 int ultima_medida, contador = 0;
@@ -165,48 +165,52 @@ class button {
     }
   }
 };
-button start(35);
+
+//Declaração dos botões
+button startButton(35);
+button bumper(37);
+button F1(36);
+button F2(38);
+button F3(40);
 
 //Classe led
-class Led {
+class led {
   private:
     unsigned long lastBlink;
 
     void init() {
       //Configura o pino do LED
-      pinMode(ledPin, OUTPUT);
+      pinMode(pin, OUTPUT);
     }
 
-  public :
-    byte ledPin;     //Pino do led
+  public:
+    byte pin;     //Pino do led
     bool state;      //Indica o estado do LED
 
-    led(byte ledPin) {
-      this-> ledPin = ledPin;
+    led(byte _pin) {
+      this-> pin = _pin;
       this-> init();
     }
 
     void set(bool _state) {
       state = _state;
-      digitalWrite(ledPin, state);
+      digitalWrite(pin, state);
     }
 
     /*
         Liga o LED
     */
-
     void on(){
       state = 1;
-      digitalWrite(ledPin, state);
+      digitalWrite(pin, state);
     }
 
     /*
        Desliga o LED
     */
-
     void off(){
       state = 0;
-      digitalWrite(ledPin, state);
+      digitalWrite(pin, state);
     }
 
     /*
@@ -214,7 +218,7 @@ class Led {
     */
     void toggle() {
       state = !state;
-      digitalWrite(ledPin, state);
+      digitalWrite(pin, state);
     }
 
     /*
@@ -230,24 +234,45 @@ class Led {
     }
 };
 
+//Declaração dos LEDs
+led redLEDesq(27);
+led greenLEDcenter(28);
+led redLEDdir(29);
+
+
 void setup() {
-  // inicia serial. o serial, pode ser usado para acompanhar a leitura dos sensores
   Serial.begin(115200);
   Wire.begin();
   mpu6050.begin();
   mpu6050.calcGyroOffsets(true);
 
+  //Sensores de refletancia
   pinMode(sensor1, INPUT);
   pinMode(sensor2, INPUT);
   pinMode(sensor3, INPUT);
   pinMode(sensor4, INPUT);
 
-  redEsq.on();
-  green.on();
-  redDir.on();
+  //Leds
+  redLEDesq.on();
+  greenLEDcenter.on();
+  redLEDdir.on();
 
-  start.waitForRealease([]() -> void {
-    loop();  
+  //Botões
+  startButton.waitForRealease([]() -> void {
+    redLEDesq.blink();
+    greenLEDcenter.blink();
+    redLEDdir.blink();
+  });
+
+  startButton.waitForPressAndRealease([]() -> void {
+    if(F1.pressed() && F3.pressed()) {
+      motorsCalibri(20);
+      //runCalibration();
+    }
+    if(F2.pressed()) {
+      debugLoop();
+      delay(50);
+    }
   });
 
   /*
@@ -258,9 +283,7 @@ void setup() {
     int FT = 100;*/
 }
 
-void loop() {
-
-  /*
+void debugLoop() {
   mpu6050.update();
   gyro = mpu6050.getGyroAngleZ();
   alvo = 360;
@@ -272,7 +295,11 @@ void loop() {
     curvaDir(40);
     Serial.println(gyro);
   }
-  frear(0);*/
+  frear(0);
+}
+
+void loop() {
+  
 }
 
 /*
