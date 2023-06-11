@@ -205,3 +205,22 @@ void curvaDir(int move) { //Curva para direita em um eixo
   motorLeft.move(-move);
   motorRight.move(-move);
 }
+
+void moveForSteps(int cm, int move) {
+  cm = ((cm*1.7)*3.14);
+  for(int steps = 0; steps < cm; steps++) {
+    motorLeft.move(move);
+    motorRight.move(-move);
+  }
+}
+
+void motorsCalibri(int move) {
+  while(millis() < 1500) {
+    motorLeft.move(move);
+    motorRight.move(-move);
+  }
+  while(millis() < 3000) {
+    motorLeft.move(-move);
+    motorRight.move(move);
+  }
+}
