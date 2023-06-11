@@ -155,8 +155,6 @@ class stepperMotor {
       this->set(velocity);
       this->run();
     }
-
-
 };
 
 // Configuração dos motores
@@ -207,7 +205,6 @@ void curvaDir(int move) { //Curva para direita em um eixo
 }
 
 void moveForSteps(int cm, int move) {
-  cm = ((cm*1.7)*3.14);
   for(int steps = 0; steps < cm; steps++) {
     motorLeft.move(move);
     motorRight.move(-move);

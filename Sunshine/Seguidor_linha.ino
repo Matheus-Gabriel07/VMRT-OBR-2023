@@ -5,43 +5,41 @@
 
 
 // caso não haja nenhum sensor acionado
-
 void segue_linha(int leitura_verdade) {
   if (leitura_verdade == 0) {
-      frente(40);
+    frente(40);
+
+    if (millis() > 7000){
+      perdido();
+    }
   }
 
   // somente sensor da extrema direita acionado
-
   else if (leitura_verdade == 1) {
       curvaDir(40);
   }
-  //segundo sensor à direita acionado
 
+  //segundo sensor à direita acionado
   else if (leitura_verdade == 10) {
       curvaDir(40);  // correcao de curso
   }
 
 
   //dois sensores a direita sobre a linha preta
-
   else if (leitura_verdade == 11) {
-
-    frente(40);                             //vai para frente 100osicionar o sensor de cor sobre a fita verde
+    frente(40);                             //vai para frente posicionar o sensor de cor sobre a fita verde
     delay(ajuste);
     frear(0);
     delay(500);
     int caso_cor = leitura_cor();
     int linha = leitura_sensor();
 
-    if (caso_cor == 0) {                        //não é acionado o sensor de cor
-
-
+    if (caso_cor == 0) {                   //não é acionado o sensor de cor
       frente(40);                          //avança até o final da linha preta
       delay(l_linha);
       
       while (linha < 99 || linha == 0) {                      //curva até achar linha no sensor intermediário à esquerda
-          curvaDir(40);
+        curvaDir(40);
         linha = leitura_sensor();
       }
     }
@@ -51,7 +49,7 @@ void segue_linha(int leitura_verdade) {
       noventadireita();              //curva a direita em 80% da curva de 90º.... evitar que ultrapasse a linha
 
       while (linha < 99) {
-          curvaDir(40);                 // procura linha com o 3º sensor de refletância
+        curvaDir(40);                 // procura linha com o 3º sensor de refletância
         linha = leitura_sensor();
       }
 
@@ -61,7 +59,6 @@ void segue_linha(int leitura_verdade) {
 
     else if (caso_cor==10){
         reverso(0);
-        
         }
   }
 

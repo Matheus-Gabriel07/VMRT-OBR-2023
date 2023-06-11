@@ -26,7 +26,7 @@ void debugLoop() {
   frear(0);
 }
 
-void rampa() {
+/*void rampa(){
   int leitura_verdade = leitura_sensor();  // leitura dos sensores de refletância, classificação de ligado/desligado pela tabela verdade
   Serial.println(leitura_verdade);         // imprime as leituras em serial
   segue_linha(leitura_verdade);            // sobe condição da leitura atual no segue linha
@@ -60,13 +60,13 @@ void rampa() {
       return resgateInd();
 
     case 1:
-      resgate();
+      //resgate();
       break;
 
     default:
       return resgateInd();
   }
-}
+}*/
 
 void sucesso() {
   //caso termine e resgate as vitimas
