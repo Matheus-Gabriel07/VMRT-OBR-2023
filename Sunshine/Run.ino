@@ -1,20 +1,5 @@
-void loop() {
-  /*
-  while (rampa == false) {
 
 
-
-    int leitura_verdade = leitura_sensor();          // leitura dos sensores de refletância, classificação de ligado/desligado pela tabela verdade
-    Serial.println(leitura_verdade);                 // imprime as leituras em serial
-    segue_linha(leitura_verdade);                    // sobe condição da leitura atual no segue linha
-
-
-
-    tempo_atual = millis();
-
-
-    tempo = tempo_atual - ultima_medida;
-  }
     //Serial.println(tempo);
    /*
     if (tempo > 50) {

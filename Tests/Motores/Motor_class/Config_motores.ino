@@ -29,20 +29,9 @@ void setup(){
   Serial.begin(115200);
 }
 void loop(){
-  while(millis()<5000){
-  frente(100);
-  }
-  while(millis()<10000){
-  statico();
-  }
-  while(millis()<15000){
-  curvaDir(100);
+  while(millis()<1000){
+    frente(40);
   }
 
-  while(millis()<20000){
-  curvaEsq(100);
-  }
-  
-  statico();
   statico();
 }

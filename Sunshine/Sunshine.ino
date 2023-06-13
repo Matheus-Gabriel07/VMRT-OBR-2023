@@ -93,157 +93,177 @@ int larg_obs = 4750;        //largura do obstáculo
 //Classe do botão
 
 class button {
-  private:
-    byte debounce;
-    unsigned long nextRead;
-    bool _hasEstade;
+private:
+  byte debounce;
+  unsigned long nextRead;
+  bool _hasEstade;
 
-    void init() {
-      pinMode(pin, INPUT_PULLUP);
+  void init() {
+    pinMode(pin, INPUT_PULLUP);
+  }
+
+public:
+  byte pin;
+  bool estado;
+
+  button(byte _pin, byte _debounce = 10) {
+    this->pin = _pin;
+    this->debounce = _debounce;
+    this->init();
+  }
+
+  bool read() {
+    if (millis() > nextRead && digitalRead(pin) != estado) {
+      estado = !estado;
+      _hasEstade = true;
+      nextRead = millis() + debounce;
     }
+    return estado;
+  }
 
-  public:
-    byte pin;
-    bool estado;
-
-    button(byte _pin, byte _debounce = 10) {
-      this->pin = _pin;
-      this->debounce = _debounce;
-      this->init();
+  bool hasEstade() {
+    read();
+    if (_hasEstade) {
+      _hasEstade = true;
+      return true;
     }
+    return false;
+  }
 
-    bool read() {
-      if (millis() > nextRead && digitalRead(pin) != estado) {
-        estado = !estado;
-        _hasEstade = true;
-        nextRead = millis() + debounce;
-      }
-      return estado;
+  bool pressed() {  //Se esta precionado
+    read();
+    return !estado;
+  }
+
+  bool released() {  //Se esta solto
+    read();
+    return estado;
+  }
+
+  bool risingEdge() {  //Indica se houve uma borda de subida
+    return !read() && hasEstade();
+  }
+
+  bool fallingEdge() {  //Indica se houve uma borda de descida
+    return read() && hasEstade();
+  }
+
+  void waitForPress(void (*doWhileWait)() = ([]() -> void {})) {  //Espera o botão ser pressionado enquando executa uma ação
+    while (!pressed()) {
+      doWhileWait();
     }
+  }
 
-    bool hasEstade() {
-      read();
-      if (_hasEstade) {
-        _hasEstade = true;
-        return true;
-      }
-      return false;
+
+  void waitForRealease(void (*doWhileWait)() = ([]() -> void {})) {  //Espera o botão ser solto enquando executa uma ação
+    while (!released()) {
+      doWhileWait();
     }
+  }
 
-    bool pressed() {  //Se esta precionado
-      read();
-      return !estado;
+  void waitForPressAndRealease(void (*doBeforePress)() = ([]() -> void {}), void (*doBeforeRealease)() = ([]() -> void {})) {  //Espera o botão ser pressionado enquanto executa uma ação e depois espera ser solto executando outra ação (lambda)
+    while (!pressed()) {
+      doBeforePress();
     }
-
-    bool released() {  //Se esta solto
-      read();
-      return estado;
+    while (!released()) {
+      doBeforeRealease();
     }
-
-    bool risingEdge() {  //Indica se houve uma borda de subida
-      return !read() && hasEstade();
-    }
-
-    bool fallingEdge() {  //Indica se houve uma borda de descida
-      return read() && hasEstade();
-    }
-
-    void waitForPress(void (*doWhileWait)() = ([]() -> void {})) {  //Espera o botão ser pressionado enquando executa uma ação
-      while (!pressed()) {
-        doWhileWait();
-      }
-    }
-
-
-    void waitForRealease(void (*doWhileWait)() = ([]() -> void {})) {  //Espera o botão ser solto enquando executa uma ação
-      while (!released()) {
-        doWhileWait();
-      }
-    }
-
-    void waitForPressAndRealease(void (*doBeforePress)() = ([]() -> void {}), void (*doBeforeRealease)() = ([]() -> void {})) {  //Espera o botão ser pressionado enquanto executa uma ação e depois espera ser solto executando outra ação (lambda)
-      while (!pressed()) {
-        doBeforePress();
-      }
-      while (!released()) {
-        doBeforeRealease();
-      }
-    }
+  }
 };
 
 //Declaração dos botões
-button startButton(35);
-button bumper(37);
-button F1(36);
-button F2(38);
-button F3(40);
+button startButton(43);
+button bumper(41);
+button F1(39);
+button F2(37);
+button F3(35);
 
 //Classe led
 class led {
-  private:
-    unsigned long lastBlink;
+private:
+  unsigned long lastBlink;  // Última vez que o LED foi piscado
 
-    void init() {
-      //Configura o pino do LED
-      pinMode(pin, OUTPUT);
-    }
+  void init() {
+    // Configura o pino do LED
+    pinMode(pin, OUTPUT);
+  }
 
-  public:
-    byte pin;    //Pino do led
-    bool state;  //Indica o estado do LED
+public:
+  byte pin;    // Pino do LED
+  bool state;  // Indica se o LED está ligado ou desligado
 
-    led(byte _pin) {
-      this->pin = _pin;
-      this->init();
-    }
+  /**
+     * @brief Construtor do LED
+     *
+     * @param pin: (byte) Pino do LED
+     */
+  led(byte _pin) {
+    this->pin = _pin;
+    this->init();
+  }
 
-    void set(bool _state) {
-      state = _state;
-      digitalWrite(pin, state);
-    }
+  /**
+     * @brief Seta um estado para o led
+     * @param _state: (bool) Estado do LED
+     *
+     * @example
+     *     meuLed.setState(true);
+     *    // LED ligado
+     */
+  void set(bool _state) {
+    state = _state;
+    digitalWrite(pin, state);
+  }
 
-    /*
-          Liga o LED
-      */
-    void on() {
-      state = 1;
-      digitalWrite(pin, state);
-    }
+  /**
+     * @brief Liga o LED
+     */
+  void on() {
+    state = 1;
+    digitalWrite(pin, state);
+  }
 
-    /*
-        Desliga o LED
-      */
-    void off() {
-      state = 0;
-      digitalWrite(pin, state);
-    }
+  /**
+     * @brief Desliga o LED
+     */
+  void off() {
+    state = 0;
+    digitalWrite(pin, state);
+  }
 
-    /*
-        Inverte o estado do LED
-      */
-    void toggle() {
-      state = !state;
-      digitalWrite(pin, state);
-    }
+  /**
+     * @brief Inverte o estado do led
+     */
+  void toggle() {
+    state = !state;
+    digitalWrite(pin, state);
+  }
 
-    /*
-        Piscar LED
-      */
-    void blink(int timeout = 150) {
-      if (millis() < lastBlink + timeout) {
-        return;
-      }
-
-      this->toggle();
-      lastBlink = millis;
-    }
+  /**
+     * @brief Pisca o LED
+     *
+     * @param delay: (int) Tempo de espera entre os pulsos
+     */
 };
 
 //Declaração dos LEDs
-led redLEDesq(27);
-led greenLEDcenter(28);
-led redLEDdir(29);
+led redLEDesq(36);
+led greenLEDcenter(34);
+led redLEDdir(32);
 
+void blink(int time = 200) {
+  bool state = true;
+  while (state != false) {
+    redLEDesq.on();
+    greenLEDcenter.on();
+    redLEDdir.on();
+    delay(time);
+    redLEDesq.off();
+    greenLEDcenter.off();
+    redLEDdir.off();
+    delay(time);
+  }
+}
 
 void setup() {
   Serial.begin(115200);
@@ -256,33 +276,36 @@ void setup() {
   pinMode(sensor2, INPUT);
   pinMode(sensor3, INPUT);
   pinMode(sensor4, INPUT);
+    pinMode(cor1, INPUT);
+  pinMode(cor2, INPUT);
 
   //Leds
-  redLEDesq.on();
-  greenLEDcenter.on();
-  redLEDdir.on();
+  blink();
 
   //Botões
-  startButton.waitForRealease([]() -> void {
-    redLEDesq.blink();
-    greenLEDcenter.blink();
-    redLEDdir.blink();
-  });
 
-  startButton.waitForPressAndRealease([]() -> void {
-    if (F1.pressed() && F3.pressed()) {
-      motorsCalibri(20);
-      //runCalibration();
-    }
-    if (F2.pressed()) {
-      debugLoop();
-      delay(50);
-    }
-  });
 
   qtr.setTypeRC();
   qtr.setSensorPins((const uint8_t[]){ 2, 3, 4, 5, 6, 7, 8, 9 }, SensorCount);
   qtr.setEmitterPin(2);
 
   int FT = 100;
+}
+
+void loop() {
+  while (rampa == false) {
+
+
+
+    int leitura_verdade = leitura_sensor();          // leitura dos sensores de refletância, classificação de ligado/desligado pela tabela verdade
+    Serial.println(leitura_verdade);                 // imprime as leituras em serial
+    segue_linha(leitura_verdade);                    // sobe condição da leitura atual no segue linha
+
+
+
+    tempo_atual = millis();
+
+
+    tempo = tempo_atual - ultima_medida;
+  }
 }
