@@ -179,6 +179,10 @@ stepperMotor motorRight(
 
 // Funções dos motores
 
+void deligado(){
+  motorLeft.off();
+  motorRight.off();
+}
 void frente(int move) {
   motorLeft.move(move);
   motorRight.move(-move);
@@ -202,22 +206,4 @@ void curvaEsq(int move) { //Curva para esquerda em um eixo
 void curvaDir(int move) { //Curva para direita em um eixo
   motorLeft.move(-move);
   motorRight.move(-move);
-}
-
-void moveForSteps(int cm, int move) {
-  for(int steps = 0; steps < cm; steps++) {
-    motorLeft.move(move);
-    motorRight.move(-move);
-  }
-}
-
-void motorsCalibri(int move) {
-  while(millis() < 1500) {
-    motorLeft.move(move);
-    motorRight.move(-move);
-  }
-  while(millis() < 3000) {
-    motorLeft.move(-move);
-    motorRight.move(move);
-  }
 }
