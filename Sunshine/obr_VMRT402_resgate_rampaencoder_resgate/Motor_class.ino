@@ -1,4 +1,5 @@
  /* Classe de funcionamento e configuração dos motores de passo */
+unsigned long graus = 0;
 
 class stepperMotor {
   private:
@@ -117,6 +118,8 @@ class stepperMotor {
         // Incrementa o número de steps do motor
         motorSteps++;
         //Serial.println(motorSteps);
+
+        graus = motorSteps;
       }
 
       //Serial.println("setando");
@@ -207,15 +210,24 @@ void curvaDir(int move) { //Curva para direita em um eixo
   motorRight.move(move);
 }
 
-void curvaDirNovenove(int move){ //(90 graus)
-  int curva = 4/2901;
-  int i =0;
-  while(i != curva){
-    motorLeft.move(move);
-    motorRight.move(move);
-    Serial.println(i);
-    i++;
+void noventinhaEsq(int move){
+  unsigned long grausatual = graus;
+
+  while((graus - grausatual) < 362){
+    curvaEsq(move);
+    Serial.println(graus);
   }
+  frear(0);
+}
+
+void noventinhaDir(int move){
+  unsigned long grausatual = graus;
+
+  while((graus - grausatual) < 362){
+    curvaDir(move);
+    Serial.println(graus);
+  }
+  frear(0);
 }
 
 void setupMotor(int state){
