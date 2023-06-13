@@ -58,17 +58,17 @@ int dist_garra = 20;
 //REGULAGEM DO ROBÔ COMEÇA AQUI
 float GiroX = 0.0;  // GIRO os copium X
 float GiroZ = 0.0;  // Giro os copium Z
-int preto = 700;    //define valor de refletância para o preto. mudar aqui, após testar os sensores
+int preto = 750;    //define valor de refletância para o preto. mudar aqui, após testar os sensores
 int corte = 2000;    //define valor que o sensor de refletância, descarta. usamos para acertar os redutores de velocidade
-int l_linha = 300;  //define extensão da linha, perpendicularmente ao robô. tempo que o robô tem que andar, para ultrapassar uma linha em um cruzamento
+int l_linha = 150;  //define extensão da linha, perpendicularmente ao robô. tempo que o robô tem que andar, para ultrapassar uma linha em um cruzamento
 int ajuste = 100;   //distância que regula a posição do sensor de cor
-int verde1 = 700;
-int verde2 = 700;        //leitura do verde
+int verde1 = 750;
+int verde2 = 750;        //leitura do verde
 int corte_verde1 = 236;  //corte para o verde
 int corte_verde2 = 175;  //corte para o verde
 //Velocidade dos Motores
-int vel_motor = 30;
-int vel_curva=20;
+int vel_motor = 20;
+int vel_curva=15;
 int FG = 150;
 int FC = 100;
 int tempo_atual = 0;
@@ -264,10 +264,14 @@ void setup() {
   redLEDdir.on();
 
   //Botões
-  startButton.waitForRealease([]() -> void {
-    redLEDesq.blink();
-    greenLEDcenter.blink();
-    redLEDdir.blink();
+  F1.waitForRealease([]() -> void {
+    redLEDesq.on();
+    greenLEDcenter.on();
+    redLEDdir.on();
+    delay(150);
+    redLEDesq.off();
+    greenLEDcenter.off();
+    redLEDdir.off();
   });
 
   /*
@@ -293,7 +297,7 @@ void debugLoop() {
   frear(0);
 }
 
-void loop() {/*
+void loop() {
   setupMotor(1);
   while (rampa == false) {
     Serial.print("Meio: ");
@@ -307,7 +311,7 @@ void loop() {/*
     tempo_atual = millis();
 
     tempo = tempo_atual - ultima_medida;
-  }*/
+  }
 }
 
 /*

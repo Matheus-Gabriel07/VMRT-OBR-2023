@@ -1,3 +1,5 @@
+unsigned long graus = 0;
+
 /* Classe de funcionamento e configuração dos motores de passo */
 
 class stepperMotor {
@@ -116,9 +118,13 @@ class stepperMotor {
         lastStep = micros();
         // Incrementa o número de steps do motor
         motorSteps++;
+
+        graus = motorSteps;
+
+        
       }
 
-      Serial.println("setando");
+      //Serial.println("setando");
     }
 
     /**
@@ -140,7 +146,7 @@ class stepperMotor {
 
       // Desabilita a variável de pulso
       _pulse = 0;
-      Serial.println("correndo");
+      //Serial.println("correndo");
 
     }
 
@@ -151,7 +157,7 @@ class stepperMotor {
 
     void move(int velocity)
     {
-      Serial.println(velocity);
+      //Serial.println(velocity);
       this->set(velocity);
       this->run();
     }
