@@ -9,6 +9,10 @@
 void segue_linha(int leitura_verdade) {
   if (leitura_verdade == 0 || leitura_verdade == 110 || leitura_verdade == 101) {
     frente(vel_motor);
+
+    redLEDesq.off();
+    greenLEDcenter.off();
+    redLEDdir.off();
   }
 
   // somente sensor da extrema direita acionado
@@ -40,13 +44,17 @@ void segue_linha(int leitura_verdade) {
       //delay(5000000000);
 
     if (le_cor >= 10 && le_cor < 12) {
+      redLEDdir.on();
+      greenLEDcenter.on();
+
       noventinhaDir(vel_curva);
       frear(0);
       delay(l_linha);
     }
 
     if (le_cor == 0 || le_cor == 1) {
-      
+      redLEDdir.on();
+
       int linha = 0;
 
       while(linha != 10 ){
@@ -54,7 +62,6 @@ void segue_linha(int leitura_verdade) {
         linha = leitura_sensor();
         Serial.println(linha);
       }
-
       frear(0);
     }
   }
@@ -68,7 +75,6 @@ void segue_linha(int leitura_verdade) {
   //sensores à direita e sensor intermediário a direita acionados
 
   else if (leitura_verdade == 111) {
-
     //delay(1000);
     frente(vel_motor);  //vai para frente 100osicionar o sensor de cor sobre a fita verde
   }
@@ -117,13 +123,16 @@ void segue_linha(int leitura_verdade) {
       //delay(5000000000);
 
     if (le_cor >= 10 && le_cor < 12) {
+      redLEDesq.on();
+      greenLEDcenter.on();
+
       noventinhaEsq(vel_curva);
       frear(0);
       delay(l_linha);
     }
 
     if (le_cor == 0 || le_cor == 1) {
-      
+      redLEDesq.on();
       int linha = 0;
 
       while(linha != 10 ){
@@ -151,11 +160,14 @@ void segue_linha(int leitura_verdade) {
   //caso todos os sensores estejam acionados
 
   else if (leitura_verdade == 1111) {
-
     int le_cor = leitura_cor();
     int linha = leitura_sensor();
-    Serial.println(le_cor);
 
+    int curvaLeft = analogRead(cor1);
+    int curvaRight = analogRead(cor2);
+
+    Serial.println(le_cor);
+    
     unsigned long posAtual = graus;
     while((graus - posAtual)<l_linha){
       frente(20);
@@ -166,21 +178,21 @@ void segue_linha(int leitura_verdade) {
       //delay(5000000000);
 
     if (le_cor >= 10 && le_cor < 12) {
-      noventinhaEsq(vel_curva);
-      frear(0);
-      delay(l_linha);
+      if (curvaLeft == le_cor){
+        noventinhaEsq(vel_curva);
+        frear(0);
+        delay(l_linha);
+      }
+      if (curvaRight == le_cor){
+        noventinhaDir(vel_curva);
+        frear(0);
+        delay(l_linha);
+      }
     }
 
     if (le_cor == 0 || le_cor == 1) {
-      
-      int linha = 0;
-
-      while(linha != 10 ){
-        curvaEsq(5);
-        linha = leitura_sensor();
-        Serial.println(linha);
-      }
-      frear(0);
+      delay(l_linha);
+      frente(vel_motor);
     }
   }
 }
