@@ -1,3 +1,5 @@
+//Arquivo morto
+
   void noventadireita()
    {
     

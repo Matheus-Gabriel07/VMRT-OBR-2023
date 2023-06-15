@@ -23,7 +23,6 @@ int alvo;
 #define cor2 A15  //CABO VERDE
 
 //DECLARAÇÃO DOS MOTORES 
-
 #define G1 12   //motor GARRA
 #define G2 13   //motor GARRA
 Encoder encoderM1(18, 19);
@@ -264,7 +263,7 @@ void setup() {
   redLEDdir.on();
 
   //Botões
-  F1.waitForRealease([]() -> void {
+  startButton.waitForRealease([]() -> void {
     redLEDesq.on();
     greenLEDcenter.on();
     redLEDdir.on();
@@ -274,130 +273,18 @@ void setup() {
     redLEDdir.off();
   });
 
-  /*
-    qtr.setTypeRC();
-    qtr.setSensorPins((const uint8_t[]){2,3, 4, 5, 6, 7, 8, 9}, SensorCount);
-    qtr.setEmitterPin(2);
-
-    int FT = 100;*/
-}
-
-void debugLoop() {
-  mpu6050.update();
-  gyro = mpu6050.getGyroAngleZ();
-  alvo = 360;
-
-  while(abs(gyro) < 274) {
-    mpu6050.update();
-    gyro = mpu6050.getGyroAngleZ();
-    alvo = 360;
-    curvaDir(40);
-    Serial.println(gyro);
-  }
-  frear(0);
 }
 
 void loop() {
-  setupMotor(1);
-  while (rampa == false) {
-    Serial.print("Meio: ");
-    Serial.print(analogRead(sensorMeio));
-    Serial.println("________________________ ");
-
-    int leitura_verdade = leitura_sensor();          // leitura dos sensores de refletância, classificação de ligado/desligado pela tabela verdade
-    Serial.println(leitura_verdade);                 // imprime as leituras em serial
-    segue_linha(leitura_verdade);                    // sobe condição da leitura atual no segue linha
-
-    tempo_atual = millis();
-
-    tempo = tempo_atual - ultima_medida;
+  startButton.waitForPressAndRealease([]() -> void{
+    run();
+  }, []() -> void{
+    aguardo();
+  });
+  if(F1.pressed() && F3.pressed()){
+    debugLoop();
+  }
+  if(F2.pressed()){
+    //alguma cois
   }
 }
-
-/*
-  while (rampa == false) {
-
-
-
-    int leitura_verdade = leitura_sensor();          // leitura dos sensores de refletância, classificação de ligado/desligado pela tabela verdade
-    Serial.println(leitura_verdade);                 // imprime as leituras em serial
-    segue_linha(leitura_verdade);                    // sobe condição da leitura atual no segue linha
-
-
-
-    tempo_atual = millis();
-
-
-    tempo = tempo_atual - ultima_medida;
-  }
-    //Serial.println(tempo);
-   /*
-    if (tempo > 50) {
-      ultima_medida = tempo_atual;
-      tempo = 0;
-      obst = distancia_frente();
-      dist_dir = distancia_lateral();
-      dist_esq = esq_distancia_lateral();
-      Serial.println("entrei");
-        if (obst < distancia_parada && obst!=0 ) {
-          Serial.println("DESVIA");
-          desvia();
-        }
-
-
-
-        if (dist_dir < 10 || dist_esq < 10 && dist_dir != 0 && dist_esq != 0){
-          contador = contador + 1;
-          Serial.println(contador);
-          Serial.println(dist_dir);
-          Serial.println(dist_esq);
-          }
-          else{
-            contador = 0;
-            }
-
-            if (contador > 10){
-              rampa = true;
-              }
-
-
-    }
-
-    Serial.println(leitura_verdade);
-    Serial.println(obst);
-  }
-
-  while (rampa == true){
-
-    int leitura_verdade = leitura_sensor();          // leitura dos sensores de refletância, classificação de ligado/desligado pela tabela verdade
-    Serial.println(contador);
-    Serial.println("rampa");                 // imprime as leituras em serial
-    segue_rampa(leitura_verdade);                    // sobe condição da leitura atual no segue linha
-    tempo_atual = millis();
-    tempo = tempo_atual - ultima_medida;
-    if (tempo > 100) {
-      ultima_medida = tempo_atual;
-      tempo = 0;
-      dist_dir = distancia_lateral();
-      dist_esq = esq_distancia_lateral();
-      Serial.println(dist_esq);
-        if (dist_esq > 10 ){
-          contador = contador + 1;
-
-          }
-          else{
-            contador = 0;
-            }
-
-         if (contador > 10){
-           rampa = false;
-              }
-    }
-  }
-
-  while (rampa == false){
-
-  delay(10000);
-  resgate();
-  }
-*/

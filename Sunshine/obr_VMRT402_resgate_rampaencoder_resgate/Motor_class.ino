@@ -210,7 +210,7 @@ void curvaDir(int move) { //Curva para direita em um eixo
   motorRight.move(move);
 }
 
-void noventinhaEsq(int move){
+void noventinhaEsq(int move){ //Curva de noventa graus para esquerda
   unsigned long grausatual = graus;
 
   while((graus - grausatual) < 362){
@@ -220,7 +220,7 @@ void noventinhaEsq(int move){
   frear(0);
 }
 
-void noventinhaDir(int move){
+void noventinhaDir(int move){ //Curva de noventa graus para direita
   unsigned long grausatual = graus;
 
   while((graus - grausatual) < 362){
@@ -231,11 +231,11 @@ void noventinhaDir(int move){
 }
 
 void setupMotor(int state){
-  if(state =  0){
+  if(state ==  0){
     motorLeft.off();
     motorRight.off();
   }
-  if(state =1){
+  if(state == 1){
      motorLeft.on();
     motorRight.on();
   }
