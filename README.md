@@ -3,6 +3,7 @@
 </p>
 
 <h1 align="center">
+  <img src="https://github.com/Matheus-Gabriel07/VRMT-OBR-2023/blob/master/Assets/Images/VMRT.png" alt="vmrtlogo" width="5%">
   VMRT 2023 - Sunshine
 </h1>
 
@@ -29,11 +30,17 @@
 <br>
 
 ## 👥 Integrantes
+
+<p align="center">
+  <img src="" alt="equipe.png" width="">
+</p>
+<br>
+
 <div align="center">
   <table style="width:70%">
       <tr align="center">
           <th><strong>Leticia Umbelino Teles</strong></th>
-          <th><strong>Luana</strong></th>
+          <th><strong>Luana Bitencourt Oliveira</strong></th>
           <th><strong>Matheus Gabriel Santos Silva</strong></th>
       </tr>
       <tr align="center">
