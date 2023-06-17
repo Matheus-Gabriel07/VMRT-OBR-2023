@@ -1,4 +1,5 @@
  /* Classe de funcionamento e configuração dos motores de passo */
+unsigned long graus = 0;
 
 class stepperMotor {
   private:
@@ -116,6 +117,9 @@ class stepperMotor {
         lastStep = micros();
         // Incrementa o número de steps do motor
         motorSteps++;
+        //Serial.println(motorSteps);
+
+        graus = motorSteps;
       }
 
       //Serial.println("setando");
@@ -155,6 +159,8 @@ class stepperMotor {
       this->set(velocity);
       this->run();
     }
+
+
 };
 
 // Configuração dos motores
@@ -179,10 +185,6 @@ stepperMotor motorRight(
 
 // Funções dos motores
 
-void deligado(){
-  motorLeft.off();
-  motorRight.off();
-}
 void frente(int move) {
   motorLeft.move(move);
   motorRight.move(-move);
@@ -199,11 +201,42 @@ void frear (int move) {
 }
 
 void curvaEsq(int move) { //Curva para esquerda em um eixo
+  motorLeft.move(-move);
+  motorRight.move(-move);
+}
+
+void curvaDir(int move) { //Curva para direita em um eixo
   motorLeft.move(move);
   motorRight.move(move);
 }
 
-void curvaDir(int move) { //Curva para direita em um eixo
-  motorLeft.move(-move);
-  motorRight.move(-move);
+void noventinhaEsq(int move){
+  unsigned long grausatual = graus;
+
+  while((graus - grausatual) < 362){
+    curvaEsq(move);
+    Serial.println(graus);
+  }
+  frear(0);
+}
+
+void noventinhaDir(int move){
+  unsigned long grausatual = graus;
+
+  while((graus - grausatual) < 362){
+    curvaDir(move);
+    Serial.println(graus);
+  }
+  frear(0);
+}
+
+void setupMotor(int state){
+  if(state ==  0){
+    motorLeft.off();
+    motorRight.off();
+  }
+  if(state == 1){
+     motorLeft.on();
+    motorRight.on();
+  }
 }
