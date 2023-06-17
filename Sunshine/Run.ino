@@ -1,74 +1,68 @@
+void run() {
+  int i = 0;
 
+  Serial.println("parado");
 
-    //Serial.println(tempo);
-   /*
-    if (tempo > 50) {
-      ultima_medida = tempo_atual;
-      tempo = 0;
-      obst = distancia_frente();
-      dist_dir = distancia_lateral();
-      dist_esq = esq_distancia_lateral();
-      Serial.println("entrei");
-        if (obst < distancia_parada && obst!=0 ) {
-          Serial.println("DESVIA");
-          desvia();
-        }
+  /*float d = distancia_frente();
+  Serial.println(d);
+  if (d < 10 && d > 0) {
 
+    i = 0;
+    delay(1500);
+  }*/
 
-
-        if (dist_dir < 10 || dist_esq < 10 && dist_dir != 0 && dist_esq != 0){
-          contador = contador + 1;
-          Serial.println(contador);
-          Serial.println(dist_dir);
-          Serial.println(dist_esq);
-          }
-          else{
-            contador = 0;
-            }
-
-            if (contador > 10){
-              rampa = true;
-              }
-
-
-    }
-
-    Serial.println(leitura_verdade);
-    Serial.println(obst);
-  }
-
-  while (rampa == true){
-
-    int leitura_verdade = leitura_sensor();          // leitura dos sensores de refletância, classificação de ligado/desligado pela tabela verdade
-    Serial.println(contador);
-    Serial.println("rampa");                 // imprime as leituras em serial
-    segue_rampa(leitura_verdade);                    // sobe condição da leitura atual no segue linha
+  while (i == 0) {
+    float d = distancia_frente();
     tempo_atual = millis();
-    tempo = tempo_atual - ultima_medida;
-    if (tempo > 100) {
-      ultima_medida = tempo_atual;
-      tempo = 0;
-      dist_dir = distancia_lateral();
-      dist_esq = esq_distancia_lateral();
-      Serial.println(dist_esq);
-        if (dist_esq > 10 ){
-          contador = contador + 1;
 
-          }
-          else{
-            contador = 0;
-            }
+    setupMotor(1);
+    while (rampa == false) {
+      setupMotor(1);
+      int tempo_atual = millis();
 
-         if (contador > 10){
-           rampa = false;
-              }
+      Serial.print("Meio: ");
+      Serial.print(analogRead(sensorMeio));
+      Serial.println("________________________ ");
+
+      if (F2.pressed()){
+        setupMotor(0);
+        aguardo();
+      }
+
+      if (F2.pressed() && F1.pressed()) {
+        loop();
+      }
+
+      int leitura_verdade = leitura_sensor();  // leitura dos sensores de refletância, classificação de ligado/desligado pela tabela verdade
+      Serial.println(leitura_verdade);         // imprime as leituras em serial
+      arrayCor1[posIn1++] = analogRead(cor1);
+      arrayCor2[posIn2++] = analogRead(cor2);
+      segue_linha(leitura_verdade);            // sobe condição da leitura atual no segue linha
+
+      int dif = tempo_atual - tempo;
+
+      if (dif > 400) {
+
+        tempo = tempo_atual;
+        d = distancia_frente();
+        Serial.println(d);
+      }
+
+      if (d < 6 && d > 1) {
+        frear(0);
+        desvia();
+      }
     }
   }
+}
 
-  while (rampa == false){
-
-  delay(10000);
-  resgate();
-  }
-*/
+void aguardo() {
+  redLEDesq.on();
+  greenLEDcenter.on();
+  redLEDdir.on();
+  delay(200);
+  redLEDesq.off();
+  greenLEDcenter.off();
+  redLEDdir.off();
+  delay(200);
 }
