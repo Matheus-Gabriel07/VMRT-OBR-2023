@@ -16,10 +16,11 @@ int alvo;
 #define sensor2 A11
 #define sensor3 A9
 #define sensor4 A8
+#define sensorMeio A10
 
 //DECLARAÇÃO DOS SENSORES DE COR
-#define cor1 A15  //CABO AZUL
-#define cor2 A14  //CABO VERDE
+#define cor1 A14  //CABO AZUL
+#define cor2 A15  //CABO VERDE
 
 //DECLARAÇÃO DOS MOTORES 
 
@@ -32,17 +33,17 @@ Encoder encoderM2(20, 21);
 
 //declaração ultrassonicos (Mudar portas)
 
-#define T_PIN_frente 24
-#define E_PIN_frente 25
+#define T_PIN_frente 45
+#define E_PIN_frente 44
 UltraSonicDistanceSensor u_frente(T_PIN_frente, E_PIN_frente);
-#define T_PIN_lat 26
-#define E_PIN_lat 27
+#define T_PIN_lat 51
+#define E_PIN_lat 50
 UltraSonicDistanceSensor u_Esq(T_PIN_lat, E_PIN_lat);
-#define T_PIN_late 28
-#define E_PIN_late 29
+#define T_PIN_late 48
+#define E_PIN_late 49
 UltraSonicDistanceSensor u_Dir(T_PIN_late, E_PIN_late);
-#define T_PIN_late 30
-#define E_PIN_late 31
+#define T_PIN_late 46
+#define E_PIN_late 47
 UltraSonicDistanceSensor u_Top(T_PIN_late, E_PIN_late);
 
 boolean rampa = false;
@@ -57,15 +58,17 @@ int dist_garra = 20;
 //REGULAGEM DO ROBÔ COMEÇA AQUI
 float GiroX = 0.0;  // GIRO os copium X
 float GiroZ = 0.0;  // Giro os copium Z
-int preto = 800;    //define valor de refletância para o preto. mudar aqui, após testar os sensores
-int corte = 990;    //define valor que o sensor de refletância, descarta. usamos para acertar os redutores de velocidade
-int l_linha = 280;  //define extensão da linha, perpendicularmente ao robô. tempo que o robô tem que andar, para ultrapassar uma linha em um cruzamento
+int preto = 650;    //define valor de refletância para o preto. mudar aqui, após testar os sensores
+int corte = 905;    //define valor que o sensor de refletância, descarta. usamos para acertar os redutores de velocidade
+int l_linha = 300;  //define extensão da linha, perpendicularmente ao robô. tempo que o robô tem que andar, para ultrapassar uma linha em um cruzamento
 int ajuste = 100;   //distância que regula a posição do sensor de cor
-int verde1 = 805;
-int verde2 = 375;        //leitura do verde
-int corte_verde1 = 236;  //corte para o verde
-int corte_verde2 = 175;  //corte para o verde
+int verde1 = 820;
+int verde2 = 880;        //leitura do verde
+int corte_verde1 = 10000;  //corte para o verde
+int corte_verde2 = 10000;  //corte para o verde
 //Velocidade dos Motores
+int vel_motor = 20;
+int vel_curva=15;
 int FG = 150;
 int FC = 100;
 int tempo_atual = 0;
@@ -167,11 +170,11 @@ class button {
 };
 
 //Declaração dos botões
-button startButton(35);
-button bumper(37);
-button F1(36);
-button F2(38);
-button F3(40);
+button startButton(43);
+button bumper(42);
+button F1(39);
+button F2(37);
+button F3(35);
 
 //Classe led
 class led {
@@ -235,45 +238,34 @@ class led {
 };
 
 //Declaração dos LEDs
-led redLEDesq(27);
-led greenLEDcenter(28);
-led redLEDdir(29);
+led redLEDesq(36);
+led greenLEDcenter(34);
+led redLEDdir(32);
 
+// Amarzenamento
+int arrayCor1[256] = {0};
+int arrayCor2[256] = {0};
+unsigned char posIn1 = 0, posIn2 = 0;
 
 void setup() {
   Serial.begin(115200);
   Wire.begin();
   mpu6050.begin();
   mpu6050.calcGyroOffsets(true);
+  
+  setupMotor(0);
 
   //Sensores de refletancia
   pinMode(sensor1, INPUT);
   pinMode(sensor2, INPUT);
   pinMode(sensor3, INPUT);
   pinMode(sensor4, INPUT);
+  pinMode(sensorMeio, INPUT);
 
   //Leds
   redLEDesq.on();
   greenLEDcenter.on();
   redLEDdir.on();
-
-  //Botões
-  startButton.waitForRealease([]() -> void {
-    redLEDesq.blink();
-    greenLEDcenter.blink();
-    redLEDdir.blink();
-  });
-
-  startButton.waitForPressAndRealease([]() -> void {
-    if(F1.pressed() && F3.pressed()) {
-      motorsCalibri(20);
-      //runCalibration();
-    }
-    if(F2.pressed()) {
-      debugLoop();
-      delay(50);
-    }
-  });
 
   /*
     qtr.setTypeRC();
@@ -284,22 +276,39 @@ void setup() {
 }
 
 void debugLoop() {
-  mpu6050.update();
-  gyro = mpu6050.getGyroAngleZ();
-  alvo = 360;
-
-  while(abs(gyro) < 274) {
-    mpu6050.update();
-    gyro = mpu6050.getGyroAngleZ();
-    alvo = 360;
-    curvaDir(40);
-    Serial.println(gyro);
-  }
-  frear(0);
+  Serial.print("sensor1: ");
+  Serial.print(analogRead(sensor1));
+  Serial.print(" ") ; 
+  Serial.print("sensor2: ");
+  Serial.print (analogRead(sensor2));
+  Serial.print(" ");
+  Serial.print("sensor3: ");
+  Serial.print(analogRead(sensor3));
+  Serial.print(" ");
+  Serial.print("sensor4");
+  Serial.print(analogRead(sensor4));
+  Serial.print("sensorMeio: ");
+  Serial.print(analogRead(sensorMeio));
+  Serial.print(" ");
+  Serial.print("sensorCor1: ");
+  Serial.print(analogRead(cor1));
+  Serial.print(" ");
+  Serial.print("sensorCor2: ");
+  Serial.print(analogRead(cor2));
+  Serial.print(" ");
+  Serial.println(" "); 
 }
 
 void loop() {
+  aguardo();
+
+  if(F2.pressed()){
+    debugLoop();
+  }
   
+  if(F1.pressed()){
+    run();
+  }
 }
 
 /*

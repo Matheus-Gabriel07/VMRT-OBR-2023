@@ -15,34 +15,38 @@ void statico () {
   motorRight.move(0);
 }
 
-void curvaEsq (int move) { //Curva para esquerda em um eixo
-  motorLeft.move(-move);
-  motorRight.move(-move);
-}
-
-void curvaDir (int move) { //Curva para direita em um eixo
+void curvaDir (int move) { //Curva para esquerda em um eixo
   motorLeft.move(move);
   motorRight.move(move);
 }
 
+void curvaEsq (int move) { //Curva para esquerda em um eixo
+  motorLeft.move(-move);
+  motorRight.move(-move);
+
+ //Serial.println(motorSteps);
+}
+
+void noventinhaEsq(int move){
+  unsigned long grausatual = graus;
+
+  while((graus - grausatual) < 362){
+    curvaEsq(move);
+    Serial.println(graus);
+  }
+}
+
+void noventinhaDir(int move){
+  unsigned long grausatual = graus;
+
+  while((graus - grausatual) < 362){
+    curvaDir(move);
+    Serial.println(graus);
+  }
+}
 void setup(){
   Serial.begin(115200);
 }
-void loop(){
-  while(millis()<5000){
-  frente(100);
-  }
-  while(millis()<10000){
-  statico();
-  }
-  while(millis()<15000){
-  curvaDir(100);
-  }
+void loop(){ 
 
-  while(millis()<20000){
-  curvaEsq(100);
-  }
-  
-  statico();
-  statico();
 }
