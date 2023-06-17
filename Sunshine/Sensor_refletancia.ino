@@ -67,7 +67,7 @@ int leitura_cor() {
   int caso = 0;         //caso é somatório dos multiplicadores. pode variar de o à 1111
  
   for (int i = 0; i < num_cor; i++) {   // for para o tratamento do vetor.
-    if (le_cor[i] < comparador[i] && le_cor[i] > cortador[i]) {              // se entre preto e o valor de corte, 1; caso contrário 0;
+    if (le_cor[i] > comparador[i] && le_cor[i] < cortador[i]) {              // se entre preto e o valor de corte, 1; caso contrário 0;
       ligado = 1;
     }
     else
@@ -81,4 +81,7 @@ int leitura_cor() {
   Serial.print("COR");
   Serial.println(caso);
   return caso; //retorna valor da soma que será enviado para o segue linha
+}
+
+void verdinho(){
 }
