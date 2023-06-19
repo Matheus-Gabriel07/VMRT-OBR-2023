@@ -32,7 +32,7 @@
 ## 👥 Integrantes
 
 <p align="center">
-  <img src="" alt="equipe.png" width="">
+  <img src="https://github.com/Matheus-Gabriel07/VMRT-OBR-2023/blob/master/Assets/Equipe.jpeg?raw=true" alt="equipe.jpeg" width="70%">
 </p>
 <br>
 
@@ -64,5 +64,5 @@
 </div>
 
 <p align="center">
-  Técnico: <a href="https://github.com/vicenteartur">Vicente Viadana Arthur Neto</a>
+  Técnico: <a href="https://github.com/vicenteartur">Vicente Viadana Arthur Neto</a> & Bruno Rodrigues de Morais 
 </p>
