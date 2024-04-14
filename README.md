@@ -35,34 +35,6 @@
   <img src="https://github.com/Matheus-Gabriel07/VMRT-OBR-2023/blob/master/Assets/Equipe.jpeg?raw=true" alt="equipe.jpeg" width="70%">
 </p>
 <br>
-
-<div align="center">
-  <table style="width:70%">
-      <tr align="center">
-          <th><strong>Leticia Umbelino Teles</strong></th>
-          <th><strong>Luana Bitencourt Oliveira</strong></th>
-          <th><strong>Matheus Gabriel Santos Silva</strong></th>
-      </tr>
-      <tr align="center">
-          <td>
-              <a href="https://www.instagram.com/lleticia_teless">
-                  <img width="100%" src="https://instagram.fcgh7-1.fna.fbcdn.net/v/t51.2885-19/319798801_5690169134403205_4036267644059401987_n.jpg?stp=dst-jpg_s320x320&_nc_ht=instagram.fcgh7-1.fna.fbcdn.net&_nc_cat=101&_nc_ohc=HdRBfPdaShgAX8tkPtw&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfDU1Rh1U1N6WS9-Crc6Yjy7DKQr-XJCKoFs5Il82pNV_Q&oe=6493B5E6&_nc_sid=f70a57">
-              </a>
-          </td>
-          <td>
-              <a href="https://www.instagram.com/luolibit">
-                  <img width="100%" src="https://instagram.fcgh7-1.fna.fbcdn.net/v/t51.2885-19/340805304_256984953418458_6895936064979503976_n.jpg?stp=dst-jpg_s320x320&_nc_ht=instagram.fcgh7-1.fna.fbcdn.net&_nc_cat=106&_nc_ohc=EO9MC10TVaUAX-ntyTo&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfDR-ZKWU022spQwwWnO6IqbNTZn3jT87KJt9BbeQqFiwQ&oe=6491FF66&_nc_sid=f70a57">
-              </a>
-          </td>
-          <td>
-              <a href="https://github.com/Matheus-Gabriel07">
-                  <img width="80%" src="https://avatars.githubusercontent.com/u/125685533?s=400&u=908cca16cba9c881da34bf07076eade59416d90a&v=4">
-              </a>
-          </td>
-      </tr>
-  </table>
-</div>
-
 <p align="center">
   Técnico: <a href="https://github.com/vicenteartur">Vicente Viadana Arthur Neto</a> & Bruno Rodrigues de Morais 
 </p>
