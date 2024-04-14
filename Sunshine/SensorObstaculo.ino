@@ -1,6 +1,3 @@
-
-//função para leitura dos sensores ultrassonicos
-
 float distancia_frente() {
   float cmMsec = u_frente.measureDistanceCm();
   return cmMsec;

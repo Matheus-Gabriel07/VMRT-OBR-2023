@@ -1,5 +1,9 @@
-class stepperMotor
-{
+#ifndef STEPPERMOTOR_H
+#define STEPPERMOTOR_H
+
+#include <Arduino.h>
+
+class stepperMotor {
 private:
     byte stepPin;               // Pino para pulsos de step
     byte directionPin;          // Pino para controle de direção
@@ -14,28 +18,7 @@ public:
     unsigned long motorSteps = 0; // Quantidade de steps realizados
     int resolution;               // Resolução do motor (steps por revolução)
 
-    /**
-     * @brief Construtor da classe de motor de passo
-
-     * @param stepPin: pino para pulsos de step
-     * @param directionPin: pino para controle de direção
-     * @param enablePin: pino de habilitação
-     * @param resolution: resolução do motor (steps por revolução)
-     * @param minimumVelocity: velocidade mínima (tempo entre steps)
-     * @param maximumVelocity: velocidade máxima (tempo entre steps)
-     *
-     * @example
-     *      stepperMotor motor(
-     *          2,    // Step pin
-     *          5,    // Direction pin
-     *          8,    // Enable pin
-     *          400,  // Resolution
-     *          7000, // Minimum velocity
-     *          400   // Maximum velocity
-     *      );
-     */
-    stepperMotor(byte stepPin, byte directionPin, byte enablePin, int resolution, int minimumVelocity, int maximumVelocity)
-    {
+    stepperMotor(byte stepPin, byte directionPin, byte enablePin, int resolution, int minimumVelocity, int maximumVelocity) {
         // Atribui as variáveis de acordo com os parâmetros
         this->stepPin = stepPin;
         this->directionPin = directionPin;
@@ -48,48 +31,28 @@ public:
         init();
     }
 
-    /**
-     * @brief Inicializa o motor de passo com as configurações
-     */
-    void init()
-    {
+    void init() {
         // Configura os pinos do motor como OUTPUT
         pinMode(stepPin, OUTPUT);
         pinMode(directionPin, OUTPUT);
         pinMode(enablePin, OUTPUT);
 
         // Desabilita o motor
-        off();
+        //off();
     }
 
-    /**
-     * @brief Habilita o motor de passo
-     */
-    void on()
-    {
+    void on() {
         digitalWrite(enablePin, 0);
+        //Serial.println("ligando");
     }
 
-    /**
-     * @brief Desabilita o motor de passo
-     */
-    void off()
-    {
+    void off() {
         digitalWrite(enablePin, 1);
+        //Serial.println("desligando");
     }
 
-    /**
-     * @brief Configura o motor de passo para mover-se
-     * @param velocity: velocidade desejada (0% a 100%)
-     *
-     * @example
-     *      motor.set(100); // Configura o motor para mover-se a 100% de velocidade
-     *      motor.run();  // Move o motor
-     */
-    void set(char velocity)
-    {
-        if (lock)
-        {
+    void set(char velocity) {
+        if (lock) {
             return;
         }
         // Configura a direção do movimento (frente ou trás)
@@ -105,26 +68,22 @@ public:
             stepTime = __LONG_MAX__;
 
         // Verifica se o motor pode mover
-        if (micros() > (lastStep + stepTime))
-        {
+        if (micros() > (lastStep + stepTime)) {
             // Marca a variável de pulso para que o motor se mova
             _pulse = 1;
             // Salva o tempo do último step
             lastStep = micros();
             // Incrementa o número de steps do motor
             motorSteps++;
-        }
-    };
+            //Serial.println(motorSteps);
 
-    /**
-     * @brief Move o motor de passo em um pulso
-     *
-     * @example
-     *      motor.set(100); // Configura o motor para mover-se a 100% de velocidade
-     *      motor.run();  // Move o motor
-     */
-    void run()
-    {
+            graus = motorSteps;
+        }
+
+        //Serial.println("setando");
+    }
+
+    void run() {
         // Verifica se o motor deve mover
         if (!_pulse)
             return;
@@ -135,15 +94,15 @@ public:
 
         // Desabilita a variável de pulso
         _pulse = 0;
+        //Serial.println("correndo");
+
     }
 
-    /**
-     * @brief Move o motor de passo com uma velocidade especificada
-     * @param velocity: velocidade desejada (0% a 100%)
-     */
-    void move(int velocity)
-    {
+    void move(int velocity) {
+        //Serial.println(velocity);
         this->set(velocity);
         this->run();
     }
 };
+
+#endif
